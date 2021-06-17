@@ -1,35 +1,41 @@
-import 'dart:convert';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:json_annotation/json_annotation.dart';
 
-class User {
-  final String name;
+@JsonSerializable()
+class User extends Equatable{
 
-  const User({
-    @required this.name,
+  final String firstName;
+  final String secondName;
+  final String surName;
+  final String secondSurname;
+  final String cityJob;
+  final String typeId;
+  final String numeberIdentification;
+  final String email;
+  final DateTime dateAdmission;
+  final String area;
+  final String state;
+  final DateTime dateRecord;
+
+  User({
+    @required this.firstName, 
+    @required this.secondName, 
+    @required this.surName, 
+    @required this.secondSurname, 
+    @required this.cityJob, 
+    @required this.typeId, 
+    @required this.numeberIdentification, 
+    @required this.email, 
+    @required this.dateAdmission, 
+    @required this.area, 
+    @required this.state, 
+    @required this.dateRecord
   });
 
-  static User fromJson(Map<String, dynamic> json) => User(
-    name: json['name'],
-  );
-}
 
-class UserApi {
-  static Future<List<User>> getUserSuggestions(String query) async {
-    final url = Uri.parse('https://jsonplaceholder.typicode.com/users');
-    final response = await http.get(url);
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 
-    if (response.statusCode == 200) {
-      final List users = json.decode(response.body);
-
-      return users.map((json) => User.fromJson(json)).where((user) {
-        final nameLower = user.name.toLowerCase();
-        final queryLower = query.toLowerCase();
-
-        return nameLower.contains(queryLower);
-      }).toList();
-    } else {
-      throw Exception();
-    }
-  }
 }
