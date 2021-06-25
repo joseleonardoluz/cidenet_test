@@ -1,3 +1,5 @@
+import 'package:cidenet_test/models/user.dart';
+import 'package:cidenet_test/pages/edit_user_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,6 +10,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    User user = User(
+       firstName: 'Jose',
+       secondName: 'Leonardo',
+       surName: 'Luz',
+       secondSurname: 'Toloza',
+       cityJob: 'Bog',
+       typeId: 'CC',
+       numeberIdentification: '10262626',
+       email: 'jlluz@gmail.com.co',
+       dateAdmission: DateTime.now(),
+       area: 'IT',
+       state: 'Activo',
+       dateRecord: DateTime.now()
+    );
 
     List<Color> colores = [
       Colors.amber, 
@@ -50,13 +67,8 @@ class HomePage extends StatelessWidget {
               itemBuilder: (context, i){
                 return Column(
                   children: [
-                    _CardUser(
-                      name: 'Jose Leonardo',
-                      lastName: 'Luz Toloza',
-                      city: 'Colombia',
-                      email: 'josel.luzt@gmail.com',
-                      state: 'Activo',
-                      color: colores[i],
+                    _ItemUser(
+                       user: user,
                     ),
                     Divider(
                       thickness: 2,
@@ -75,23 +87,13 @@ class HomePage extends StatelessWidget {
 
 }
 
-class _CardUser extends StatelessWidget {
+class _ItemUser extends StatelessWidget {
 
-  final Color color;
-  final String name;
-  final String lastName;
-  final String city;
-  final String email;
-  final String state;
+  final User user;
 
-  _CardUser({
+  _ItemUser({
     Key key, 
-    @required this.color, 
-    @required this.name, 
-    @required this.lastName, 
-    @required this.city,
-    @required this.email, 
-    @required this.state,
+    @required this.user, 
   }) : super(key: key);
 
   @override
@@ -113,17 +115,16 @@ class _CardUser extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,                    
+                  user.firstName+ ' '+ user.secondName,                 
                   style: styleCustom
                 ),
-                SizedBox(height: 7),
                 Text(
-                  lastName,
+                  user.surName +' '+user.secondSurname,
                   style: styleCustom
                 ),
                 SizedBox(height: 10),
                 Text(
-                  city,
+                  user.cityJob,
                   style: styleCustom
                 )
               ],
@@ -138,18 +139,34 @@ class _CardUser extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  email,
+                  user.email,
                   style: styleCustom
                 ),
                 SizedBox(height: 15),
                 Text(
-                  state,
+                  user.state,
                   style: styleCustom
                 )
               ],
             ),
           ),
-          Icon(Icons.menu)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: (){
+                   Navigator.pushNamed(context, 'editUserPage', arguments: user);
+                },
+                child: Icon(Icons.edit, color: Colors.blue)
+              ),
+              InkWell(
+                onTap: (){
+                  
+                },
+                child: Icon(Icons.delete_forever_outlined, color: Colors.red)
+              ),
+            ],
+          )
         ],
       ),
     );
