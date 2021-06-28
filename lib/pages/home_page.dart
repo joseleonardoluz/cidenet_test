@@ -1,3 +1,4 @@
+import 'package:cidenet_test/helper/formatter_tiem.dart';
 import 'package:cidenet_test/models/user.dart';
 import 'package:cidenet_test/pages/edit_user_page.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+  
     User user = User(
        firstName: 'Jose',
        secondName: 'Leonardo',
@@ -39,7 +40,7 @@ class HomePage extends StatelessWidget {
       Color.fromRGBO(1, 110, 190,1),
     ];
 
-    final sizeCustom = MediaQuery.of(context).size;
+    final sizeCustom = MediaQuery.of(context).size; 
 
     return SafeArea(
       child: Scaffold(
@@ -47,6 +48,13 @@ class HomePage extends StatelessWidget {
           title: Text('Usuarios'),
           backgroundColor: Colors.indigo,
           actions: [
+            IconButton(icon: Icon(
+              Icons.add_box
+            ),
+             onPressed: (){
+                Navigator.of(context).pushNamed('loginPage');
+             }
+            ),
             IconButton(icon: Icon(
               Icons.search
             ),
@@ -98,7 +106,8 @@ class _ItemUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   Size sizeCustom = MediaQuery.of(context).size;
+   Size sizeCustom = MediaQuery.of(context).size;   
+
    TextStyle styleCustom = TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16);
