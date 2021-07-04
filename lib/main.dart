@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-        child: MaterialApp(
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cidened',
       initialRoute: 'homepage',

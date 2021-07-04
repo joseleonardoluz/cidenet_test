@@ -1,6 +1,6 @@
-import 'package:cidenet_test/helper/formatter_tiem.dart';
+import 'package:cidenet_test/bloc/login_bloc.dart';
+import 'package:cidenet_test/bloc/provider.dart';
 import 'package:cidenet_test/models/user.dart';
-import 'package:cidenet_test/pages/edit_user_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,21 +11,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-    User user = User(
-       firstName: 'Jose',
-       secondName: 'Leonardo',
-       surName: 'Luz',
-       secondSurname: 'Toloza',
-       cityJob: 'Bog',
-       typeId: 'CC',
-       numeberIdentification: '10262626',
-       email: 'jlluz@gmail.com.co',
-       dateAdmission: DateTime.now(),
-       area: 'IT',
-       state: 'Activo',
-       dateRecord: DateTime.now()
-    );
 
     List<Color> colores = [
       Colors.amber, 
@@ -41,6 +26,7 @@ class HomePage extends StatelessWidget {
     ];
 
     final sizeCustom = MediaQuery.of(context).size; 
+    final bloc  = Provider.of(context);
 
     return SafeArea(
       child: Scaffold(
@@ -76,7 +62,7 @@ class HomePage extends StatelessWidget {
                 return Column(
                   children: [
                     _ItemUser(
-                       user: user,
+                      bloc: bloc,                    
                     ),
                     Divider(
                       thickness: 2,
@@ -97,87 +83,104 @@ class HomePage extends StatelessWidget {
 
 class _ItemUser extends StatelessWidget {
 
-  final User user;
+  final LoginBloc bloc;
 
   _ItemUser({
-    Key key, 
-    @required this.user, 
+    Key key,
+    @required this.bloc, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-   Size sizeCustom = MediaQuery.of(context).size;   
+   Size _sizeCustom = MediaQuery.of(context).size;   
 
    TextStyle styleCustom = TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16);
-    return Container(  
-      margin: EdgeInsets.symmetric(horizontal: 10),    
-      width: sizeCustom.width,
-      height: sizeCustom.width * 0.20,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,        
-        children: [
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.firstName+ ' '+ user.secondName,                 
-                  style: styleCustom
-                ),
-                Text(
-                  user.surName +' '+user.secondSurname,
-                  style: styleCustom
-                ),
-                SizedBox(height: 10),
-                Text(
-                  user.cityJob,
-                  style: styleCustom
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            
-          ),
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.email,
-                  style: styleCustom
-                ),
-                SizedBox(height: 15),
-                Text(
-                  user.state,
-                  style: styleCustom
-                )
-              ],
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: (){
-                   Navigator.pushNamed(context, 'editUserPage', arguments: user);
-                },
-                child: Icon(Icons.edit, color: Colors.blue)
-              ),
-              InkWell(
-                onTap: (){
                   
-                },
-                child: Icon(Icons.delete_forever_outlined, color: Colors.red)
+    return StreamBuilder(
+      stream: bloc.user,
+      builder: (context, snapshot) {
+        final User _user = snapshot.data;
+        return Container(  
+          margin: EdgeInsets.symmetric(horizontal: 10),    
+          width: _sizeCustom.width,
+          height: _sizeCustom.width * 0.20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,        
+            children: [
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                     (_user != null || snapshot.hasData) 
+                     ? _user.firstName + ' '+ _user.secondName
+                     : 'Name',
+                      style: styleCustom
+                    ),
+                    Text(
+                      (_user != null || snapshot.hasData) 
+                      ? _user.surName + ' '+ _user.secondSurname
+                      : 'Surname',
+                      style: styleCustom
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      (_user != null || snapshot.hasData) 
+                       ? _user.cityJob
+                       : 'City job',
+                      style: styleCustom
+                    )
+                  ],
+                ),
               ),
+              SizedBox(
+                
+              ),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (_user != null || snapshot.hasData) 
+                       ? _user.email
+                       : 'Mail',
+                      style: styleCustom
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      (_user != null || snapshot.hasData) 
+                       ? _user.state
+                       : '',
+                      style: styleCustom
+                    )
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: (){
+                       Navigator.pushNamed(context, 'editUserPage', arguments: snapshot.data);
+                    },
+                    child: Icon(Icons.edit, color: Colors.blue)
+                  ),
+                  InkWell(
+                    onTap: (){
+                      
+                    },
+                    child: Icon(Icons.delete_forever_outlined, color: Colors.red)
+                  ),
+                ],
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      }
     );
   }
 }
